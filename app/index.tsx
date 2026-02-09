@@ -1,33 +1,28 @@
-import { useTheme } from "@/themes/ThemeContext";
-import { Stack } from "expo-router";
-import { Button, Text, View } from "react-native";
+import { ScreenContainer } from "@/components/ScreenContainer";
+import { Title } from "@/components/Title";
+import { Button } from "@/components/Button";
+import { useState } from "react";
+import { Input } from "@/components/input";
 
-export default function Index() {
-  const { theme, switchTheme } = useTheme();
+// https://www.notion.so/Atividade-302cc8c2db9680cfbd7ac2998d7dbba1
+export default function Home() {
+  const [name, setName] = useState("");
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: theme.colors.background,
-      }}
-    >
-      <Stack.Screen
-        options={{
-          headerStyle: { backgroundColor: theme.colors.surface },
-          headerTintColor: theme.colors.text,
-        }}
+    <ScreenContainer>
+      <Title align="center">Forms Pro</Title>
+
+      <Input
+        placeholder="Digite seu nome"
+        value={name}
+        onChangeText={setName}
       />
-      <Text style={{ color: theme.colors.text, fontSize: theme.fontSizes.lg }}>
-        Edit app/index.tsx to edit this screen.
-      </Text>
+
       <Button
-        title="Switch theme"
-        color={theme.colors.primary}
-        onPress={() => switchTheme()}
+        title="Entrar"
+        onPress={() => console.log(name)}
+        style={{ marginTop: 20 }}
       />
-    </View>
+    </ScreenContainer>
   );
 }
