@@ -6,6 +6,7 @@ export type Theme = typeof lightTheme;
 
 interface ThemeContextProps {
   theme: Theme;
+  currentTheme: "light" | "dark";
   switchTheme: () => void;
 }
 
@@ -24,12 +25,13 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   };
 
   const theme = themes[currentTheme];
+
   const switchTheme = () => {
-    setCurrentTheme((current) => (current === "light" ? "dark" : "light"));
+    setCurrentTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, switchTheme }}>
+    <ThemeContext.Provider value={{ theme, currentTheme, switchTheme }}>
       {children}
     </ThemeContext.Provider>
   );
@@ -38,7 +40,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
 export const useTheme = () => {
   const context = useContext(ThemeContext);
   if (!context) {
-    throw new Error("useTheme must be used whitin a ThemeProvider");
+    throw new Error("useTheme must be used within a ThemeProvider");
   }
   return context;
 };
