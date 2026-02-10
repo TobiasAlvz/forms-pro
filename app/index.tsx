@@ -5,11 +5,25 @@ import { Input } from "@/components/input";
 import { Theme, useTheme } from "@/themes/ThemeContext";
 import { StyleSheet, Text, View } from "react-native";
 import { Link } from "expo-router";
+import { SingInForm } from "@/components/SingInForm";
 
 export default function Index() {
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
+
   return (
     <ScreenContainer>
-      <View></View>
+      <View style={styles.formContainer}>
+        <Title align="center">Faça login com seu email</Title>
+        <SingInForm/>
+        <Text style={styles.footerText}>
+          Não tem conta?
+          {""}
+          <Link href={"/singup"} style={styles.linkText}>
+            Cadastrar
+          </Link>
+        </Text>
+      </View>
     </ScreenContainer>
   );
 }
