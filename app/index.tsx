@@ -1,28 +1,32 @@
 import { ScreenContainer } from "@/components/ScreenContainer";
 import { Title } from "@/components/Title";
 import { Button } from "@/components/Button";
-import { useState } from "react";
 import { Input } from "@/components/input";
+import { Theme, useTheme } from "@/themes/ThemeContext";
+import { StyleSheet, Text, View } from "react-native";
+import { Link } from "expo-router";
 
-// https://www.notion.so/Atividade-302cc8c2db9680cfbd7ac2998d7dbba1
-export default function Home() {
-  const [name, setName] = useState("");
-
+export default function Index() {
   return (
     <ScreenContainer>
-      <Title align="center">Forms Pro</Title>
-
-      <Input
-        placeholder="Digite seu nome"
-        value={name}
-        onChangeText={setName}
-      />
-
-      <Button
-        title="Entrar"
-        onPress={() => console.log(name)}
-        style={{ marginTop: 20 }}
-      />
+      <View></View>
     </ScreenContainer>
   );
 }
+
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    formContainer: {
+      flex: 1,
+      justifyContent: "center",
+    },
+    footerText: {
+      marginTop: theme.spacing.lg,
+      color: theme.colors.secondary,
+      textAlign: "center",
+    },
+    linkText: {
+      color: theme.colors.primary,
+      fontWeight: "600",
+    },
+  });
