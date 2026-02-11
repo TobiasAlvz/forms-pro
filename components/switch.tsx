@@ -18,22 +18,23 @@ export const Switch: FC<Props> = ({ label, value, onValueChange }) => {
       <RNSwitch
         value={value}
         onValueChange={onValueChange}
-        thumbColor={value ? theme.colors.primary : '#f4f3f4'}
-        trackColor={{ true: theme.colors.primary + '66', false: '#cccccc' }}
+        thumbColor={value ? theme.colors.primary : "#f4f3f4"}
+        trackColor={{ true: theme.colors.primary + "66", false: "#cccccc" }}
       />
     </View>
-  )
-}
+  );
+};
 
-const createStyles = (theme: Theme) => StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: theme.spacing.sm,
-  },
-  label: {
-    fontSize: theme.fontSizes.md,
-    color: theme.colors.text,
-  },
-});
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      marginTop: theme.spacing.sm,
+    },
+    label: {
+      fontSize: theme.fontSizes.md,
+      color: theme.colors.text,
+    },
+  });
