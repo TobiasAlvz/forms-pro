@@ -11,6 +11,8 @@ export default function Index() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
+  //https://complex-humor-1df.notion.site/304cc8c2db96809aad0be0827978f4d6
+
   return (
     <ScreenContainer>
       <View style={styles.formContainer}>
