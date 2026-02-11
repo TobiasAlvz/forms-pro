@@ -1,4 +1,4 @@
-import { useTheme } from "@/themes/ThemeContext";
+
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Alert, View } from "react-native";
@@ -6,7 +6,7 @@ import { Input } from "./input";
 import { Button } from "./Button";
 
 export const SingUpForm = () => {
-  const { theme } = useTheme();
+
   const router = useRouter();
 
   const [name, setName] = useState("");
