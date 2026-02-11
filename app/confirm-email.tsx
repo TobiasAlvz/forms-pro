@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/Button";
 import { ScreenContainer } from "@/components/ScreenContainer";
 import { Title } from "@/components/Title";
@@ -14,11 +13,12 @@ export default function ConfirmEmailScreen() {
   return (
     <ScreenContainer style={{ justifyContent: "center" }}>
       <Title align="center">Verique seu email</Title>
-      <Text style={styles.text}>
-       Verifique seu Email e confirme seu login
-      </Text>
+      <Text style={styles.text}>Verifique seu Email e confirme seu login</Text>
 
-      <Button title="Voltar para a tela de inicio" onPress={() => router.replace("/")} />
+      <Button
+        title="Voltar para a tela de inicio"
+        onPress={() => router.replace("/")}
+      />
     </ScreenContainer>
   );
 }
