@@ -1,4 +1,5 @@
-
+import { useSession } from "@/providers/SessionContext";
+import { useTheme } from "@/themes/ThemeContext";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Alert, View } from "react-native";
@@ -6,7 +7,8 @@ import { Input } from "./input";
 import { Button } from "./Button";
 
 export const SingUpForm = () => {
-
+  const { theme } = useTheme();
+  const { signUp } = useSession();
   const router = useRouter();
 
   const [name, setName] = useState("");
@@ -14,51 +16,68 @@ export const SingUpForm = () => {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSingUp = () => {
+  const handleSignUp = async () => {
+    setLoading(true);
     if (password !== confirmPassword) {
-      Alert.alert("Error", "As senhas não são iguais");
+      Alert.alert("Error", "Passwords do not match!");
       return;
     }
-    //   aqui vai ser o registro do supabase;
+
+    await signUp({ name, email, phone, password });
+
+    setName("");
+    setEmail("");
+    setPhone("");
+    setPassword("");
+    setConfirmPassword("");
+    setLoading(false);
+
     router.push("/confirm-email");
   };
 
   return (
     <>
-      <View>
-        <Input placeholder="Nome" value={name} onChangeText={setName}></Input>
+      <View style={{ gap: theme.spacing.md, marginBottom: theme.spacing.lg }}>
+        <Input placeholder="Your name" value={name} onChangeText={setName} />
 
         <Input
-          placeholder="Email"
+          placeholder="Your email"
           keyboardType="email-address"
           autoCapitalize="none"
           value={email}
           onChangeText={setEmail}
-        ></Input>
+        />
 
         <Input
-          placeholder="Telefone"
+          placeholder="Your phone"
           keyboardType="phone-pad"
           value={phone}
           onChangeText={setPhone}
-        ></Input>
+        />
 
         <Input
-          placeholder="Password"
+          placeholder="Your password"
           secureTextEntry
           value={password}
           onChangeText={setPassword}
-        ></Input>
+        />
 
         <Input
-          placeholder="Confirm Password"
+          placeholder="Confirm password"
           secureTextEntry
           value={confirmPassword}
           onChangeText={setConfirmPassword}
-        ></Input>
+        />
       </View>
-      <Button title="Cadastrar" onPress={handleSingUp} />
+
+      <Button
+        title="Sign Up"
+        disabled={loading}
+        loading={loading}
+        onPress={handleSignUp}
+      />
     </>
   );
 };
