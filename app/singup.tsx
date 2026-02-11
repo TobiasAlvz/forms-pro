@@ -6,7 +6,7 @@ export default function SingUpScreen() {
   return (
     <ScreenContainer>
       <Title align="center">Crie sua Conta</Title>
-      <SingUpForm/>
+      <SingUpForm />
     </ScreenContainer>
   );
 }
