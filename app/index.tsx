@@ -1,7 +1,5 @@
 import { ScreenContainer } from "@/components/ScreenContainer";
 import { Title } from "@/components/Title";
-import { Button } from "@/components/Button";
-import { Input } from "@/components/input";
 import { Theme, useTheme } from "@/themes/ThemeContext";
 import { StyleSheet, Text, View } from "react-native";
 import { Link } from "expo-router";
@@ -17,7 +15,7 @@ export default function Index() {
     <ScreenContainer>
       <View style={styles.formContainer}>
         <Title align="center">Faça login com seu email</Title>
-        <SingInForm/>
+        <SingInForm />
         <Text style={styles.footerText}>
           Não tem conta?
           {""}
