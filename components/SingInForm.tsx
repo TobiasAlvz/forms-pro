@@ -1,17 +1,24 @@
+import { useSession } from "@/providers/SessionContext";
 import { useTheme } from "@/themes/ThemeContext";
 import { useState } from "react";
 import { View } from "react-native";
 import { Input } from "./input";
 import { Button } from "./Button";
 
-export const SingInForm = () => {
+export const SignInForm = () => {
   const { theme } = useTheme();
+  const { signIn } = useSession();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSingIn = () => {
-    // aqui faremos o login com o supabase
+  const handleSignIn = async () => {
+    setLoading(true);
+    await signIn(email, password);
+    setEmail("");
+    setPassword("");
+    setLoading(false);
   };
 
   return (
@@ -23,17 +30,22 @@ export const SingInForm = () => {
           autoCapitalize="none"
           value={email}
           onChangeText={setEmail}
-        ></Input>
+        />
 
         <Input
           placeholder="Password"
           secureTextEntry
           value={password}
           onChangeText={setPassword}
-        ></Input>
+        />
       </View>
 
-      <Button title="Login" onPress={handleSingIn}/>
+      <Button
+        title="Sign In"
+        disabled={loading}
+        loading={loading}
+        onPress={handleSignIn}
+      />
     </>
   );
 };
