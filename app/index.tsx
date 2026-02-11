@@ -3,19 +3,20 @@ import { Title } from "@/components/Title";
 import { Theme, useTheme } from "@/themes/ThemeContext";
 import { StyleSheet, Text, View } from "react-native";
 import { Link } from "expo-router";
-import { SingInForm } from "@/components/SingInForm";
+import { SignInForm } from "@/components/SingInForm";
+import { useSession } from "@/providers/SessionContext";
 
 export default function Index() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
-
-  //https://complex-humor-1df.notion.site/304cc8c2db96802bbfaff322a2501459
+  const { user } = useSession();
 
   return (
     <ScreenContainer>
       <View style={styles.formContainer}>
         <Title align="center">Faça login com seu email</Title>
-        <SingInForm />
+        <SignInForm />
+        {user && <Text>Usuario Criado{user.user_metadata.name}</Text>}
         <Text style={styles.footerText}>
           Não tem conta?
           {""}
