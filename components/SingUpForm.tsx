@@ -21,6 +21,7 @@ export const SingUpForm = () => {
       return;
     }
     //   aqui vai ser o registro do supabase;
+    router.push("/confirm-email");
   };
 
   return (
