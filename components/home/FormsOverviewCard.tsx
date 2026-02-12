@@ -8,36 +8,38 @@ interface Props {
   latestForm?: { title: string, responses: number };
 }
 
-export const FormsOverviewCard: FC<Props> = ({ totalForms, totalResponses, latestForm}) => {
+export const FormsOverviewCard: FC<Props> = ({ totalForms, totalResponses, latestForm }) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
   return (
     <View style={styles.card}>
-      <Text style={styles.title}>Your Activity</Text>
+      <Text style={styles.title}>Sua atividade</Text>
 
       <View style={styles.row}>
-        <Text style={styles.label}>Total Forms:</Text>
+        <Text style={styles.label}>Total de formulários:</Text>
         <Text style={styles.value}>{totalForms}</Text>
       </View>
 
       <View style={styles.row}>
-        <Text style={styles.label}>Total Responses:</Text>
+        <Text style={styles.label}>Total de respostas:</Text>
         <Text style={styles.value}>{totalResponses}</Text>
       </View>
 
       <View style={styles.divider} />
 
-      <Text style={styles.subtitle}> Most Recent Form:</Text>
+      <Text style={styles.subtitle}>Formulário mais recente:</Text>
 
       {
         latestForm ? (
           <>
             <Text style={styles.recentTitle}>{latestForm.title}</Text>
-            <Text style={styles.responses}>{latestForm.responses} responses</Text>
+            <Text style={styles.responses}>{latestForm.responses} respostas</Text>
           </>
         ) : (
-          <Text style={styles.noLatestFormText}>sdaasdas</Text>
+          <Text style={styles.noLatestFormText}>
+            Nenhum formulário recente encontrado
+          </Text>
         )
       }
     </View>
