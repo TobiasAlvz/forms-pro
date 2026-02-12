@@ -6,6 +6,8 @@ import { Link } from "expo-router";
 import { SignInForm } from "@/components/SingInForm";
 import { useSession } from "@/providers/SessionContext";
 
+//https://www.notion.so/304cc8c2db96809aad0be0827978f4d6
+
 export default function Index() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
