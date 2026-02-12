@@ -23,6 +23,7 @@ export default function Index() {
           <Link href={"/singup"} style={styles.linkText}>
             Cadastrar
           </Link>
+          
         </Text>
       </View>
     </ScreenContainer>
