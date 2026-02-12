@@ -1,23 +1,24 @@
-export const COLORS = {  primary: '#6750A4',
-  onPrimary: '#FFFFFF',
+export const COLORS = {
+  primary: "#6750A4",
+  onPrimary: "#FFFFFF",
 
-  secondary: '#625B71',
-  onSecondary: '#FFFFFF',
+  secondary: "#625B71",
+  onSecondary: "#FFFFFF",
 
-  background: '#F6F4F6',
-  surface: '#FFFFFF',
-  onSurface: '#1C1B1F',
+  background: "#F6F4F6",
+  surface: "#FFFFFF",
+  onSurface: "#1C1B1F",
 
-  success: '#00C853',
-  danger: '#D32F2F',
-  warning: '#FFA000',
-  info: '#0288D1',
+  success: "#00C853",
+  danger: "#D32F2F",
+  warning: "#FFA000",
+  info: "#0288D1",
 
-  border: '#E0E0E0',
-  disabled: '#C7C7C7',
-  text: '#1C1B1F',
+  border: "#E0E0E0",
+  disabled: "#C7C7C7",
+  text: "#1C1B1F",
 
-  shadow: 'rgba(0, 0, 0, 0.08)',
+  shadow: "rgba(0, 0, 0, 0.08)",
 };
 
 export const SPACING = {
