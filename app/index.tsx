@@ -2,16 +2,25 @@ import { ScreenContainer } from "@/components/ScreenContainer";
 import { Title } from "@/components/Title";
 import { Theme, useTheme } from "@/themes/ThemeContext";
 import { StyleSheet, Text, View } from "react-native";
-import { Link } from "expo-router";
+import { Link, router, useRouter } from "expo-router";
 import { SignInForm } from "@/components/SingInForm";
 import { useSession } from "@/providers/SessionContext";
+import { useEffect } from "react";
 
 //https://www.notion.so/304cc8c2db96809aad0be0827978f4d6
 
 export default function Index() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
-  const { user } = useSession();
+  const { user, session } = useSession();
+  const router = useRouter();
+
+
+  useEffect(() => {
+    if (session) {
+      router.replace("/home");
+    }
+  }, [session, router]);
 
   return (
     <ScreenContainer>
@@ -25,7 +34,6 @@ export default function Index() {
           <Link href={"/singup"} style={styles.linkText}>
             Cadastrar
           </Link>
-          
         </Text>
       </View>
     </ScreenContainer>
