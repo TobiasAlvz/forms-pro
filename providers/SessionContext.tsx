@@ -40,35 +40,22 @@ export const SessionProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const router = useRouter();
 
   useEffect(() => {
-    let mounted = true;
-
-    const init = async () => {
-      const { data } = await supabase.auth.getSession();
-      if (mounted) {
-        setSession(data.session);
-        setIsLoading(false);
-      }
-    };
-
-    init();
-
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, _session) => {
-        if (mounted) setSession(_session);
-      },
-    );
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      setIsLoading(false);
+    });
 
     return () => {
-      mounted = false;
-      listener.subscription.unsubscribe();
+      subscription.unsubscribe();
     };
   }, []);
 
   const user = session?.user ?? null;
 
   const signIn = async (email: string, password: string) => {
-    const { session } = await authService.singIn({ email, password });
-    setSession(session);
+    await authService.signIn({ email, password });
   };
 
   const signUp = async (input: {
@@ -77,15 +64,13 @@ export const SessionProvider: FC<{ children: ReactNode }> = ({ children }) => {
     email: string;
     password: string;
   }) => {
-    const { session } = await authService.singUp(input);
-    setSession(session);
+    await authService.signUp(input);
   };
 
   const signOut = async () => {
     await supabase.auth.signOut();
     router.dismissAll();
     router.replace("/");
-    setSession(null);
   };
 
   return (
