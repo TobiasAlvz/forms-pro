@@ -1,12 +1,13 @@
+
 import { supabase } from "@/lib/supabase";
 import { Alert } from "react-native";
 
-interface SingInAttributes {
+interface SignInAttributes {
   email: string;
   password: string;
 }
 
-interface SingUpAttributes {
+interface SignUpAttributes {
   name: string;
   email: string;
   phone: string;
@@ -14,16 +15,22 @@ interface SingUpAttributes {
 }
 
 const authService = {
-  singIn: async (input: SingInAttributes) => {
-    const { data, error } = await supabase.auth.signInWithPassword(input);
+  async signIn(input: SignInAttributes) {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: input.email,
+      password: input.password,
+    });
+
     if (error) {
-      console.log(error);
-      Alert.alert("Erro", "Algo deu errado");
+      console.log("SIGN IN ERROR:", error.message);
+      Alert.alert("Erro ao entrar", error.message);
+      throw error;
     }
+
     return data;
   },
 
-  singUp: async (input: SingUpAttributes) => {
+  async signUp(input: SignUpAttributes) {
     const { data, error } = await supabase.auth.signUp({
       email: input.email,
       password: input.password,
@@ -34,10 +41,13 @@ const authService = {
         },
       },
     });
+
     if (error) {
-      console.log(error);
-      Alert.alert("Erro", "Algo deu errado");
+      console.log("SIGN UP ERROR:", error.message);
+      Alert.alert("Erro ao cadastrar", error.message);
+      throw error;
     }
+
     return data;
   },
 };
