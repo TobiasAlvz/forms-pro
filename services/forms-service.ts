@@ -1,22 +1,40 @@
 import { supabase } from "@/lib/supabase";
+import { Alert } from "react-native";
 
-export type Form = {
+export type Formulario = {
   id: string;
   userId: string;
   title: string;
   description: string;
-  isPublised: boolean;
-};
+  isPublished: boolean;
+}
 
-const formService = {
-  createEmptyForm: async (userId: string) => {
+const servicoFormularios = {
+  criarFormularioVazio: async (userId: string) => {
     const { data, error } = await supabase
-      .from("forms")
+      .from('forms')
       .insert({
         user_id: userId,
-        title: "",
-        description: "",
-        isPublised: false,
-      });
-  },
+        title: 'Novo formulário em branco',
+        description: 'Este é um formulário vazio. Edite a descrição dele.',
+        is_published: false
+      })
+      .select(`
+        id,
+        userId: user_id,
+        title,
+        description,
+        isPublished: is_published
+      `)
+      .single<Formulario>();
+
+    if (error) {
+      console.log(error);
+      Alert.alert('Erro', 'Não foi possível criar um novo formulário vazio.');
+    }
+
+    return data;
+  }
 };
+
+export default servicoFormularios;
