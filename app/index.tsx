@@ -7,14 +7,13 @@ import { SignInForm } from "@/components/SingInForm";
 import { useSession } from "@/providers/SessionContext";
 import { useEffect } from "react";
 
-//https://www.notion.so/304cc8c2db96809aad0be0827978f4d6
+
 
 export default function Index() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
   const { user, session } = useSession();
   const router = useRouter();
-
 
   useEffect(() => {
     if (session) {
