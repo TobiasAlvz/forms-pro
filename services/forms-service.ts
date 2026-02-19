@@ -9,8 +9,8 @@ export type Formulario = {
   isPublished: boolean;
 };
 
-const servicoFormularios = {
-  criarFormularioVazio: async (userId: string) => {
+const formsService = {
+  createEmptyForm: async (userId: string) => {
     const { data, error } = await supabase
       .from("forms")
       .insert({
@@ -39,4 +39,4 @@ const servicoFormularios = {
   },
 };
 
-export default servicoFormularios;
+export default formsService;
