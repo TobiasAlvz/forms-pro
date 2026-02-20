@@ -2,12 +2,10 @@ import { ScreenContainer } from "@/components/ScreenContainer";
 import { Title } from "@/components/Title";
 import { Theme, useTheme } from "@/themes/ThemeContext";
 import { StyleSheet, Text, View } from "react-native";
-import { Link, router, useRouter } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { SignInForm } from "@/components/SingInForm";
 import { useSession } from "@/providers/SessionContext";
 import { useEffect } from "react";
-
-
 
 export default function Index() {
   const { theme } = useTheme();
