@@ -1,7 +1,9 @@
 import { ScreenContainer } from "@/components/ScreenContainer";
 import { useSession } from "@/providers/SessionContext";
+import { Form } from "@/services/forms-service";
 import { Theme, useTheme } from "@/themes/ThemeContext";
 import { useRouter } from "expo-router";
+import { useState } from "react";
 import { StyleSheet, Text } from "react-native";
 
 export default function ListScreen() {
@@ -10,6 +12,7 @@ export default function ListScreen() {
   const styles = createStyles(theme);
   const router = useRouter();
 
+  const [forms, setForms] = useState<Form[]>([]);
   return (
     <ScreenContainer>
       <Text></Text>
