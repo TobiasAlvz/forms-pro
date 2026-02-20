@@ -25,8 +25,12 @@ export const QuickLinks = () => {
       Alert.alert("Error", "Erro");
       return;
     }
+    router.navigate({
+      pathname: "/forms/forms",
+      params: { formId: form.id },
+    });
+    setLoading(false);
   };
-
   return (
     <View style={{ gap: theme.spacing.sm }}>
       <Button
