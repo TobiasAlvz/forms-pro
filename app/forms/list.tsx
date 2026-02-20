@@ -5,7 +5,9 @@ import formsService, { Form } from "@/services/forms-service";
 import { Theme, useTheme } from "@/themes/ThemeContext";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { TouchableOpacity } from "react-native";
+import { Text } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 
 export default function ListScreen() {
   const { user } = useSession();
@@ -23,16 +25,49 @@ export default function ListScreen() {
     }
   }, []);
 
+  const renderForm = ({ item }: { item: Form }) => (
+    <TouchableOpacity
+      style={styles.card}
+      onPress={() =>
+        router.navigate({
+          pathname: "/forms/form",
+          params: { formId: item.id },
+        })
+      }
+    >
+      <Text style={styles.title}>{item.title}</Text>
+      <Text style={styles.description}>
+        {item.description || "No description provided."}
+      </Text>
+      <Text
+        style={[
+          styles.status,
+          {
+            color: item.isPublished
+              ? theme.colors.success
+              : theme.colors.disabled,
+          },
+        ]}
+      >
+        {item.isPublished ? "Published" : "Draft"}
+      </Text>
+    </TouchableOpacity>
+  );
+
   return (
     <ScreenContainer>
-      <Title>Seus Formularios</Title>
-      {/* <FlatList data={forms} /> */}
-      {/* //   renderItem={renderForm}
-    
-      keyExtractor={(item) => item.id} */}
+      <Title>Your forms</Title>
+
+      <FlatList
+        data={forms}
+        renderItem={renderForm}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={styles.list}
+      />
     </ScreenContainer>
   );
 }
+
 const createStyles = (theme: Theme) =>
   StyleSheet.create({
     list: {
