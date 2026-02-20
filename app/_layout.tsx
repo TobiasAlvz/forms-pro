@@ -13,7 +13,8 @@ export default function RootLayout() {
             options={{ title: "Cadastrar Cliente" }}
           />
           <Stack.Screen name="confirm-email" options={{ headerShown: false }} />
-          <Stack.Screen name="home" options={{ title: "Inicio"}} />
+          <Stack.Screen name="home" options={{ title: "Inicio" }} />
+          <Stack.Screen name="forms/forms" options={{ title: "Formularios" }} />
         </Stack>
       </SessionProvider>
     </ThemeProvider>
