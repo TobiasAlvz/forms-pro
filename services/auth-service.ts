@@ -1,4 +1,3 @@
-
 import { supabase } from "@/lib/supabase";
 import { Alert } from "react-native";
 
