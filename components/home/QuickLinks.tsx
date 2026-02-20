@@ -42,7 +42,7 @@ export const QuickLinks = () => {
       <Button
         title="Todos os formulários"
         variant="outline"
-        onPress={() => {}}
+        onPress={() => router.navigate("/forms/list")}
       />
       <Button title="Ver perfil" variant="outline" onPress={() => {}} />
       <Button
