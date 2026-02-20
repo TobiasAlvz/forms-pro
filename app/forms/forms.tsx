@@ -20,35 +20,35 @@ export default function EditFormScreen() {
   return (
     <ScreenContainer>
       <ScrollView contentContainerStyle={styles.content}>
-        <Title>Editing form</Title>
+        <Title>Editando formulário</Title>
         <Text>{formId}</Text>
 
-        <Input placeholder="Title" value={title} onChangeText={setTitle} />
+        <Input placeholder="Título" value={title} onChangeText={setTitle} />
         <Input
-          placeholder="Description"
+          placeholder="Descrição"
           value={description}
           onChangeText={setDescription}
         />
 
         <View style={styles.switchRow}>
           <Switch
-            label="Published?"
+            label="Publicado?"
             value={isPublished}
             onValueChange={setIsPublished}
           />
         </View>
 
-        <Button title="Save form" onPress={() => {}} />
+        <Button title="Salvar formulário" onPress={() => {}} />
 
         <View style={styles.buttonsRow}>
           <Button
-            title="Preview form"
+            title="Visualizar formulário"
             style={{ flex: 1 }}
             variant="outline"
             onPress={() => {}}
           />
           <Button
-            title="Delete form"
+            title="Excluir formulário"
             style={{ flex: 1 }}
             variant="danger"
             onPress={() => {}}
@@ -56,8 +56,12 @@ export default function EditFormScreen() {
         </View>
 
         <View style={styles.fieldHeader}>
-          <Title>Fields</Title>
-          <Button title="Add field" variant="outline" onPress={() => {}} />
+          <Title>Campos</Title>
+          <Button
+            title="Adicionar campo"
+            variant="outline"
+            onPress={() => {}}
+          />
         </View>
       </ScrollView>
     </ScreenContainer>
