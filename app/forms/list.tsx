@@ -5,7 +5,7 @@ import formsService, { Form } from "@/services/forms-service";
 import { Theme, useTheme } from "@/themes/ThemeContext";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text } from "react-native";
+import { StyleSheet } from "react-native";
 
 export default function ListScreen() {
   const { user } = useSession();
