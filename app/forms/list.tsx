@@ -1,10 +1,11 @@
 import { ScreenContainer } from "@/components/ScreenContainer";
+import { Title } from "@/components/Title";
 import { useSession } from "@/providers/SessionContext";
 import formsService, { Form } from "@/services/forms-service";
 import { Theme, useTheme } from "@/themes/ThemeContext";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { StyleSheet, Text } from "react-native";
+import { FlatList, StyleSheet, Text } from "react-native";
 
 export default function ListScreen() {
   const { user } = useSession();
@@ -21,9 +22,14 @@ export default function ListScreen() {
       });
     }
   }, []);
+
   return (
     <ScreenContainer>
-      <Text></Text>
+      <Title>Seus Formularios</Title>
+      {/* <FlatList data={forms} /> */}
+      {/* //   renderItem={renderForm}
+    
+      keyExtractor={(item) => item.id} */}
     </ScreenContainer>
   );
 }
