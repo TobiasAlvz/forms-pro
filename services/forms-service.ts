@@ -27,8 +27,8 @@ const formsService = {
       .from("forms")
       .insert({
         user_id: userId,
-        title: "Novo formulário em branco",
-        description: "Este é um formulário vazio. Edite a descrição.",
+        title: "",
+        description: "",
         is_published: false,
       })
       .select(

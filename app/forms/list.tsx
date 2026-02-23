@@ -28,7 +28,6 @@ export default function FormsListScreen() {
     setLoading(false);
   };
 
-
   useFocusEffect(
     useCallback(() => {
       loadForms();
@@ -112,7 +111,6 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 16,
     marginHorizontal: 2,
-
 
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },

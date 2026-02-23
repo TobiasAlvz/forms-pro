@@ -48,7 +48,6 @@ export default function EditFormScreen() {
     loadForm();
   }, [formId]);
 
-  
   const saveForm = async () => {
     if (typeof formId !== "string") return;
 

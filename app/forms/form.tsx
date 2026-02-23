@@ -20,7 +20,6 @@ export default function ShowFormScreen() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-   
     if (!formId || typeof formId !== "string") return;
 
     const loadForm = async () => {
