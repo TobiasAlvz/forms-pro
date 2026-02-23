@@ -8,6 +8,7 @@ import { View } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { Text } from "react-native";
 import { StyleSheet } from "react-native";
+import { Feather } from "@expo/vector-icons";
 
 interface props {
   field: Field;
@@ -45,25 +46,25 @@ export const FieldCard: FC<props> = ({
         <View style={styles.controls}>
           {!isFirst && (
             <TouchableOpacity onPress={() => onMoveUp(field.id)}>
-              {/* <Feather name="arrow-up" size={20} color={theme.colors.text} /> */}
+              <Feather name="arrow-up" size={20} color={theme.colors.text} />
             </TouchableOpacity>
           )}
 
           {!isLast && (
             <TouchableOpacity onPress={() => onMoveDown(field.id)}>
-              {/* <Feather name="arrow-down" size={20} color={theme.colors.text} /> */}
+              <Feather name="arrow-down" size={20} color={theme.colors.text} />
             </TouchableOpacity>
           )}
 
           <TouchableOpacity onPress={() => onRemove(field.id)}>
-            {/* <Feather name="trash-2" size={20} color={theme.colors.danger} /> */}
+            <Feather name="trash-2" size={20} color={theme.colors.danger} />
           </TouchableOpacity>
 
-          {/* <Feathe
+          <Feather
             name={expanded ? "chevron-up" : "chevron-down"}
             size={20}
             color={theme.colors.text}
-          /> */}
+          />
         </View>
       </TouchableOpacity>
 
