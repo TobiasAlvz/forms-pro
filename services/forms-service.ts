@@ -21,7 +21,7 @@ export type Field = {
 };
 
 const formsService = {
-  // CRIAR FORMULÁRIO
+ 
   createEmptyForm: async (userId: string) => {
     const { data, error } = await supabase
       .from("forms")
@@ -52,7 +52,6 @@ const formsService = {
     return data;
   },
 
-  // LISTAR FORMULÁRIOS DO USUÁRIO
   getUserForms: async (userId: string) => {
     const { data, error } = await supabase
       .from("forms")
@@ -78,7 +77,7 @@ const formsService = {
     return data as Form[];
   },
 
-  // BUSCAR FORMULÁRIO + CAMPOS
+
   getFormById: async (formId: string) => {
     const { data: form, error: formError } = await supabase
       .from("forms")
@@ -134,7 +133,7 @@ const formsService = {
     };
   },
 
-  // ATUALIZAR FORMULÁRIO  ⭐⭐⭐ (AQUI ESTAVA O BUG)
+
   updateForm: async (formId: string, updates: Partial<Form>) => {
     const payload = {
       ...(updates.title !== undefined && { title: updates.title }),
@@ -171,7 +170,7 @@ const formsService = {
     return data;
   },
 
-  // EXCLUIR FORMULÁRIO
+
   deleteForm: async (formId: string) => {
     const { error } = await supabase.from("forms").delete().eq("id", formId);
 
@@ -184,7 +183,6 @@ const formsService = {
     return true;
   },
 
-  // CRIAR CAMPO (NOVO — você não tinha isso)
   createField: async (field: Omit<Field, "id">) => {
     const { data, error } = await supabase
       .from("form_fields")
@@ -218,7 +216,6 @@ const formsService = {
     return data;
   },
 
-  // ATUALIZAR CAMPO
   updateField: async (fieldId: string, updates: Partial<Field>) => {
     const payload = {
       ...(updates.label !== undefined && { label: updates.label }),
@@ -247,7 +244,7 @@ const formsService = {
     return data;
   },
 
-  // DELETAR CAMPO
+
   deleteField: async (fieldId: string) => {
     const { error } = await supabase
       .from("form_fields")

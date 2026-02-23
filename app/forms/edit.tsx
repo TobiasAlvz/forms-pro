@@ -21,7 +21,6 @@ export default function EditFormScreen() {
   const [isPublished, setIsPublished] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // carregar formulário
   useEffect(() => {
     const loadForm = async () => {
       if (!formId || typeof formId !== "string") return;
@@ -49,7 +48,7 @@ export default function EditFormScreen() {
     loadForm();
   }, [formId]);
 
-  // salvar
+  
   const saveForm = async () => {
     if (typeof formId !== "string") return;
 

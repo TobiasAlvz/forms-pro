@@ -20,7 +20,7 @@ export default function ShowFormScreen() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Espera o router hidratar
+   
     if (!formId || typeof formId !== "string") return;
 
     const loadForm = async () => {
@@ -49,7 +49,6 @@ export default function ShowFormScreen() {
     loadForm();
   }, [formId]);
 
-  // tela de loading (MUITO importante no React Native)
   if (loading) {
     return (
       <ScreenContainer style={styles.center}>
@@ -61,7 +60,6 @@ export default function ShowFormScreen() {
     );
   }
 
-  // segurança extra
   if (!form) {
     return (
       <ScreenContainer style={styles.center}>

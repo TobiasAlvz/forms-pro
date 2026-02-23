@@ -28,7 +28,7 @@ export default function FormsListScreen() {
     setLoading(false);
   };
 
-  // mantém atualização automática
+
   useFocusEffect(
     useCallback(() => {
       loadForms();
@@ -113,13 +113,12 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     marginHorizontal: 2,
 
-    // sombra iOS
+
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
     shadowRadius: 8,
 
-    // sombra Android
     elevation: 4,
   },
 

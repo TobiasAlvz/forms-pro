@@ -21,7 +21,6 @@ export default function EditFormScreen() {
   const [isPublished, setIsPublished] = useState(false);
   const [setLoading] = useState(true);
 
-  // carregar dados do formulário
   useEffect(() => {
     const loadForm = async () => {
       if (!formId || typeof formId !== "string") {
