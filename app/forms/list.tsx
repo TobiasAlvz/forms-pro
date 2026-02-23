@@ -1,99 +1,177 @@
 import { ScreenContainer } from "@/components/ScreenContainer";
 import { Title } from "@/components/Title";
-import { useSession } from "@/providers/SessionContext";
+import { Button } from "@/components/Button";
 import formsService, { Form } from "@/services/forms-service";
-import { Theme, useTheme } from "@/themes/ThemeContext";
-import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
-import { TouchableOpacity } from "react-native";
-import { Text } from "react-native";
-import { FlatList, StyleSheet } from "react-native";
+import { useSession } from "@/providers/SessionContext";
+import { useFocusEffect, useRouter } from "expo-router";
+import { useCallback, useState } from "react";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from "react-native";
 
-export default function ListScreen() {
+export default function FormsListScreen() {
   const { user } = useSession();
-  const { theme } = useTheme();
-  const styles = createStyles(theme);
   const router = useRouter();
 
   const [forms, setForms] = useState<Form[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (user) {
-      formsService.getUserForms(user.id).then((data) => {
-        setForms(data);
-      });
-    }
-  }, []);
+  const loadForms = async () => {
+    if (!user) return;
+    setLoading(true);
+    const data = await formsService.getUserForms(user.id);
+    setForms(data);
+    setLoading(false);
+  };
 
-  const renderForm = ({ item }: { item: Form }) => (
+  // mantém atualização automática
+  useFocusEffect(
+    useCallback(() => {
+      loadForms();
+    }, [user]),
+  );
+
+  const openForm = (id: string) => {
+    router.push(`/forms/edit?formId=${id}`);
+  };
+
+  const renderItem = ({ item }: { item: Form }) => (
     <TouchableOpacity
       style={styles.card}
-      onPress={() =>
-        router.navigate({
-          pathname: "/forms/form",
-          params: { formId: item.id },
-        })
-      }
+      activeOpacity={0.85}
+      onPress={() => openForm(item.id)}
     >
-      <Text style={styles.title}>{item.title}</Text>
-      <Text style={styles.description}>
-        {item.description || "No description provided."}
+      <View style={styles.header}>
+        <Text style={styles.title} numberOfLines={1}>
+          {item.title}
+        </Text>
+
+        <View
+          style={[
+            styles.badge,
+            { backgroundColor: item.isPublished ? "#DCFCE7" : "#FEF3C7" },
+          ]}
+        >
+          <Text
+            style={[
+              styles.badgeText,
+              { color: item.isPublished ? "#166534" : "#92400E" },
+            ]}
+          >
+            {item.isPublished ? "Publicado" : "Rascunho"}
+          </Text>
+        </View>
+      </View>
+
+      <Text style={styles.description} numberOfLines={2}>
+        {item.description || "Sem descrição informada."}
       </Text>
-      <Text
-        style={[
-          styles.status,
-          {
-            color: item.isPublished
-              ? theme.colors.success
-              : theme.colors.disabled,
-          },
-        ]}
-      >
-        {item.isPublished ? "Published" : "Draft"}
-      </Text>
+
+      <View style={styles.actions}>
+        <Button title="Editar formulário" onPress={() => openForm(item.id)} />
+      </View>
     </TouchableOpacity>
   );
 
   return (
     <ScreenContainer>
-      <Title>Your forms</Title>
+      <Title>Seus formulários</Title>
+
+      {!loading && forms.length === 0 && (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyTitle}>Nenhum formulário ainda</Text>
+          <Text style={styles.emptyText}>
+            Crie seu primeiro formulário para começar a receber respostas.
+          </Text>
+        </View>
+      )}
 
       <FlatList
         data={forms}
-        renderItem={renderForm}
         keyExtractor={(item) => item.id}
+        renderItem={renderItem}
         contentContainerStyle={styles.list}
+        showsVerticalScrollIndicator={false}
       />
     </ScreenContainer>
   );
 }
 
-const createStyles = (theme: Theme) =>
-  StyleSheet.create({
-    list: {
-      paddingVertical: theme.spacing.md,
-      paddingHorizontal: theme.spacing.xs,
-      gap: theme.spacing.md,
-    },
-    card: {
-      backgroundColor: theme.colors.surface,
-      borderRadius: theme.radius.md,
-      padding: theme.spacing.md,
-      elevation: 1,
-    },
-    title: {
-      fontSize: theme.fontSizes.md,
-      fontWeight: "bold",
-      color: theme.colors.primary,
-      marginBottom: theme.spacing.sm,
-    },
-    description: {
-      fontSize: theme.fontSizes.sm,
-      color: theme.colors.secondary,
-      marginBottom: theme.spacing.xs,
-    },
-    status: {
-      fontSize: theme.fontSizes.xs,
-      fontWeight: "600",
-    },
-  });
+const styles = StyleSheet.create({
+  list: {
+    paddingVertical: 12,
+    gap: 12,
+  },
+
+  card: {
+    backgroundColor: "#FFFFFF",
+    padding: 16,
+    borderRadius: 16,
+    marginHorizontal: 2,
+
+    // sombra iOS
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+
+    // sombra Android
+    elevation: 4,
+  },
+
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+
+  title: {
+    fontSize: 18,
+    fontWeight: "600",
+    flex: 1,
+    marginRight: 10,
+  },
+
+  description: {
+    color: "#6B7280",
+    fontSize: 14,
+    marginBottom: 12,
+  },
+
+  badge: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 999,
+  },
+
+  badgeText: {
+    fontSize: 12,
+    fontWeight: "600",
+  },
+
+  actions: {
+    marginTop: 4,
+  },
+
+  emptyContainer: {
+    marginTop: 80,
+    alignItems: "center",
+    paddingHorizontal: 24,
+  },
+
+  emptyTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    marginBottom: 6,
+  },
+
+  emptyText: {
+    textAlign: "center",
+    color: "#6B7280",
+  },
+});

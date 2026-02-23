@@ -21,6 +21,7 @@ export type Field = {
 };
 
 const formsService = {
+  // CRIAR FORMULÁRIO
   createEmptyForm: async (userId: string) => {
     const { data, error } = await supabase
       .from("forms")
@@ -36,20 +37,22 @@ const formsService = {
         userId: user_id,
         title,
         description,
-        isPublished: is_published
+        isPublished: is_published,
+        createdAt: created_at
       `,
       )
       .single<Form>();
 
     if (error) {
       console.log(error);
-      Alert.alert("Erro", "Não foi possível criar um novo formulário vazio.");
+      Alert.alert("Erro", "Não foi possível criar um novo formulário.");
+      return null;
     }
 
     return data;
   },
 
-  // Obter os formulários de um usuário
+  // LISTAR FORMULÁRIOS DO USUÁRIO
   getUserForms: async (userId: string) => {
     const { data, error } = await supabase
       .from("forms")
@@ -75,7 +78,7 @@ const formsService = {
     return data as Form[];
   },
 
-  // Obter os dados detalhados de um formulário
+  // BUSCAR FORMULÁRIO + CAMPOS
   getFormById: async (formId: string) => {
     const { data: form, error: formError } = await supabase
       .from("forms")
@@ -92,10 +95,10 @@ const formsService = {
       .eq("id", formId)
       .single<Form>();
 
-    if (formError) {
+    if (formError || !form) {
       console.log(formError);
-      Alert.alert("Erro", "Erro ao carregar os dados do formulário");
-      return;
+      Alert.alert("Erro", "Erro ao carregar o formulário.");
+      return null;
     }
 
     const { data: fields, error: fieldsError } = await supabase
@@ -116,42 +119,22 @@ const formsService = {
 
     if (fieldsError) {
       console.log(fieldsError);
-      Alert.alert("Erro", "Erro ao carregar os campos do formulário");
-      return { form };
+      Alert.alert("Erro", "Erro ao carregar os campos.");
     }
 
-    const { count: responseCount } = await supabase
+    const { count } = await supabase
       .from("form_responses")
-      .select("id", { count: "exact", head: true })
+      .select("*", { count: "exact", head: true })
       .eq("form_id", form.id);
 
     return {
       form,
-      fields: fields || ([] as Field[]),
-      responseCount,
+      fields: (fields || []) as Field[],
+      responseCount: count ?? 0,
     };
   },
 
-  // Obter as respostas de um formulário
-  getFormResponses: async (formId: string) => {
-    const { data, error } = await supabase
-      .from("form_responses")
-      .select(
-        "id, formId: form_id, submittedAt: submitted_at, answers, metadata",
-      )
-      .eq("form_id", formId)
-      .order("");
-
-    if (error || !data) {
-      console.log(error);
-      Alert.alert("Erro", "Erro ao buscar as respostas do formulário.");
-      return [];
-    }
-
-    return data;
-  },
-
-  // Atualizar e excluir um formulário
+  // ATUALIZAR FORMULÁRIO  ⭐⭐⭐ (AQUI ESTAVA O BUG)
   updateForm: async (formId: string, updates: Partial<Form>) => {
     const payload = {
       ...(updates.title !== undefined && { title: updates.title }),
@@ -163,23 +146,121 @@ const formsService = {
       }),
     };
 
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("forms")
       .update(payload)
-      .eq("id", formId);
+      .eq("id", formId)
+      .select(
+        `
+        id,
+        userId: user_id,
+        title,
+        description,
+        isPublished: is_published,
+        createdAt: created_at
+      `,
+      )
+      .single<Form>();
 
     if (error) {
       console.log(error);
       Alert.alert("Erro", "Erro ao atualizar o formulário.");
+      return null;
     }
+
+    return data;
   },
 
+  // EXCLUIR FORMULÁRIO
   deleteForm: async (formId: string) => {
     const { error } = await supabase.from("forms").delete().eq("id", formId);
+
     if (error) {
       console.log(error);
       Alert.alert("Erro", "Erro ao excluir o formulário.");
+      return false;
     }
+
+    return true;
+  },
+
+  // CRIAR CAMPO (NOVO — você não tinha isso)
+  createField: async (field: Omit<Field, "id">) => {
+    const { data, error } = await supabase
+      .from("form_fields")
+      .insert({
+        kind: field.kind,
+        label: field.label,
+        options: field.options,
+        is_required: field.isRequired,
+        field_order: field.fieldOrder,
+        form_id: field.formId,
+      })
+      .select(
+        `
+        id,
+        kind,
+        label,
+        options,
+        isRequired: is_required,
+        fieldOrder: field_order,
+        formId: form_id
+      `,
+      )
+      .single<Field>();
+
+    if (error) {
+      console.log(error);
+      Alert.alert("Erro", "Erro ao criar campo.");
+      return null;
+    }
+
+    return data;
+  },
+
+  // ATUALIZAR CAMPO
+  updateField: async (fieldId: string, updates: Partial<Field>) => {
+    const payload = {
+      ...(updates.label !== undefined && { label: updates.label }),
+      ...(updates.options !== undefined && { options: updates.options }),
+      ...(updates.isRequired !== undefined && {
+        is_required: updates.isRequired,
+      }),
+      ...(updates.fieldOrder !== undefined && {
+        field_order: updates.fieldOrder,
+      }),
+    };
+
+    const { data, error } = await supabase
+      .from("form_fields")
+      .update(payload)
+      .eq("id", fieldId)
+      .select()
+      .single<Field>();
+
+    if (error) {
+      console.log(error);
+      Alert.alert("Erro", "Erro ao atualizar campo.");
+      return null;
+    }
+
+    return data;
+  },
+
+  // DELETAR CAMPO
+  deleteField: async (fieldId: string) => {
+    const { error } = await supabase
+      .from("form_fields")
+      .delete()
+      .eq("id", fieldId);
+
+    if (error) {
+      console.log(error);
+      Alert.alert("Erro", "Erro ao excluir campo.");
+      return false;
+    }
+
+    return true;
   },
 };
 

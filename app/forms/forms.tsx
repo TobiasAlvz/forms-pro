@@ -3,27 +3,75 @@ import { Input } from "@/components/input";
 import { ScreenContainer } from "@/components/ScreenContainer";
 import { Switch } from "@/components/switch";
 import { Title } from "@/components/Title";
+import formsService from "@/services/forms-service";
 import { Theme, useTheme } from "@/themes/ThemeContext";
-import { useLocalSearchParams } from "expo-router";
-import { useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
+import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function EditFormScreen() {
   const { formId } = useLocalSearchParams();
+  const router = useRouter();
+
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isPublished, setIsPublished] = useState(false);
+  const [setLoading] = useState(true);
+
+  // carregar dados do formulário
+  useEffect(() => {
+    const loadForm = async () => {
+      if (!formId || typeof formId !== "string") {
+        Alert.alert("Erro", "Formulário inválido.");
+        router.back();
+        return;
+      }
+
+      const data = await formsService.getFormById(formId);
+
+      if (!data) {
+        Alert.alert("Erro", "Formulário não encontrado.");
+        router.back();
+        return;
+      }
+
+      setTitle(data.form.title ?? "");
+      setDescription(data.form.description ?? "");
+      setIsPublished(data.form.isPublished ?? false);
+    };
+
+    loadForm();
+  }, [formId]);
+
+  const saveForm = async () => {
+    if (typeof formId !== "string") return;
+
+    const result = await formsService.updateForm(formId, {
+      title,
+      description,
+      isPublished,
+    });
+
+    if (!result) {
+      Alert.alert("Erro", "Falha ao salvar.");
+      return;
+    }
+
+    Alert.alert("Sucesso", "Formulário salvo!");
+    router.back();
+  };
 
   return (
     <ScreenContainer>
       <ScrollView contentContainerStyle={styles.content}>
         <Title>Editando formulário</Title>
-        <Text>{formId}</Text>
+        <Text>ID: {formId}</Text>
 
         <Input placeholder="Título" value={title} onChangeText={setTitle} />
+
         <Input
           placeholder="Descrição"
           value={description}
@@ -38,31 +86,7 @@ export default function EditFormScreen() {
           />
         </View>
 
-        <Button title="Salvar formulário" onPress={() => {}} />
-
-        <View style={styles.buttonsRow}>
-          <Button
-            title="Visualizar formulário"
-            style={{ flex: 1 }}
-            variant="outline"
-            onPress={() => {}}
-          />
-          <Button
-            title="Excluir formulário"
-            style={{ flex: 1 }}
-            variant="danger"
-            onPress={() => {}}
-          />
-        </View>
-
-        <View style={styles.fieldHeader}>
-          <Title>Campos</Title>
-          <Button
-            title="Adicionar campo"
-            variant="outline"
-            onPress={() => {}}
-          />
-        </View>
+        <Button title="Salvar formulário" onPress={saveForm} />
       </ScrollView>
     </ScreenContainer>
   );
@@ -77,15 +101,5 @@ const createStyles = (theme: Theme) =>
     switchRow: {
       marginTop: theme.spacing.md,
       alignItems: "flex-start",
-    },
-    buttonsRow: {
-      flexDirection: "row",
-      gap: theme.spacing.sm,
-    },
-    fieldHeader: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "baseline",
-      marginTop: theme.spacing.lg,
     },
   });

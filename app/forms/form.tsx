@@ -37,7 +37,7 @@ export default function ShowFormScreen() {
 
         setForm(data.form);
         setFields(data.fields ?? []);
-        setResponseCount(data.responseCount ?? 0);
+        setResponseCount(data?.responseCount ?? 0);
       } catch (error) {
         console.log(error);
         Alert.alert("Erro", "Falha ao carregar o formulário.");
@@ -86,7 +86,7 @@ export default function ShowFormScreen() {
       <View style={styles.buttonsContainer}>
         <Button
           title="Editar formulário"
-          onPress={() => router.push(`/forms/forms`)}
+          onPress={() => router.push(`/forms/edit`)}
           style={styles.button}
           variant="outline"
         />
