@@ -212,34 +212,6 @@ const formsService = {
     return data;
   },
 
-  updateField: async (fieldId: string, updates: Partial<Field>) => {
-    const payload = {
-      ...(updates.label !== undefined && { label: updates.label }),
-      ...(updates.options !== undefined && { options: updates.options }),
-      ...(updates.isRequired !== undefined && {
-        is_required: updates.isRequired,
-      }),
-      ...(updates.fieldOrder !== undefined && {
-        field_order: updates.fieldOrder,
-      }),
-    };
-
-    const { data, error } = await supabase
-      .from("form_fields")
-      .update(payload)
-      .eq("id", fieldId)
-      .select()
-      .single<Field>();
-
-    if (error) {
-      console.log(error);
-      Alert.alert("Erro", "Erro ao atualizar campo.");
-      return null;
-    }
-
-    return data;
-  },
-
   deleteField: async (fieldId: string) => {
     const { error } = await supabase
       .from("form_fields")
@@ -287,7 +259,41 @@ const formsService = {
     return data;
   },
 
-  
+  updateField: async (fieldID: string, updates: Partial<Field>) => {
+    const { data, error } = await supabase
+      .from("form_fields")
+      .insert({
+        kind: updates.kind,
+        label: updates.label,
+        options: updates.options,
+        is_required: updates.isRequired,
+        field_order: updates.fieldOrder,
+      })
+      .eq("id", fieldID)
+      .select(
+        `
+      id,
+      formId: form_id,
+      label,
+      kind,
+      options,
+      isRequired: is_required,
+      fieldOrder: field_order
+    `,
+      )
+      .single<Field>();
+
+    if (error) {
+      console.log(error);
+      return null;
+    }
+
+    return data;
+  },
+
+  removeField: async (fieldId: string) => {
+    await supabase.from("form_fields").delete().eq("id", fieldId);
+  },
 };
 
 export default formsService;
