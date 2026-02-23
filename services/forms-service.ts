@@ -21,7 +21,6 @@ export type Field = {
 };
 
 const formsService = {
- 
   createEmptyForm: async (userId: string) => {
     const { data, error } = await supabase
       .from("forms")
@@ -76,7 +75,6 @@ const formsService = {
 
     return data as Form[];
   },
-
 
   getFormById: async (formId: string) => {
     const { data: form, error: formError } = await supabase
@@ -133,7 +131,6 @@ const formsService = {
     };
   },
 
-
   updateForm: async (formId: string, updates: Partial<Form>) => {
     const payload = {
       ...(updates.title !== undefined && { title: updates.title }),
@@ -169,7 +166,6 @@ const formsService = {
 
     return data;
   },
-
 
   deleteForm: async (formId: string) => {
     const { error } = await supabase.from("forms").delete().eq("id", formId);
@@ -244,7 +240,6 @@ const formsService = {
     return data;
   },
 
-
   deleteField: async (fieldId: string) => {
     const { error } = await supabase
       .from("form_fields")
@@ -258,6 +253,38 @@ const formsService = {
     }
 
     return true;
+  },
+
+  addField: async (formId: string, fieldOrder: number) => {
+    const { data, error } = await supabase
+      .from("form_fields")
+      .insert({
+        form_id: formId,
+        label: "Novo campo",
+        kind: "Escreva um texto",
+        options: [],
+        is_required: false,
+        field_order: fieldOrder,
+      })
+      .select(
+        `
+      id,
+      formId: form_id,
+      label,
+      kind,
+      options,
+      isRequired: is_required,
+      fieldOrder: field_order
+    `,
+      )
+      .single<Field>();
+
+    if (error) {
+      console.log(error);
+      return null;
+    }
+
+    return data;
   },
 };
 
