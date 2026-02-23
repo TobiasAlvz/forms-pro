@@ -167,7 +167,7 @@ export default function EditFormScreen() {
           <FieldCard
             key={field.id}
             field={field}
-            onSavedField={saveField}
+            onSaveField={saveField}
             onMoveUp={moveUp}
             onMoveDown={moveDown}
             onRemove={removeField}

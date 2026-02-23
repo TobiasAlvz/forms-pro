@@ -4,15 +4,12 @@ import { FC, useState } from "react";
 import { Button } from "../Button";
 import { Switch } from "../switch";
 import { Input } from "../input";
-import { View } from "react-native";
-import { TouchableOpacity } from "react-native";
-import { Text } from "react-native";
-import { StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
-interface props {
+interface Props {
   field: Field;
-  onSavedField: (fieldId: string, field: Field) => void;
+  onSaveField: (fieldId: string, field: Field) => void;
   onMoveUp: (fieldId: string) => void;
   onMoveDown: (fieldId: string) => void;
   onRemove: (fieldId: string) => void;
@@ -21,13 +18,13 @@ interface props {
   isLast: boolean;
 }
 
-export const FieldCard: FC<props> = ({
+export const FieldCard: FC<Props> = ({
   field,
-  onSavedField,
+  onSaveField,
+  onStateChange,
+  onRemove,
   onMoveUp,
   onMoveDown,
-  onRemove,
-  onStateChange,
   isFirst,
   isLast,
 }) => {
@@ -108,7 +105,7 @@ export const FieldCard: FC<props> = ({
 
           <Button
             title="Salvar campo"
-            onPress={() => onSavedField(field.id, field)}
+            onPress={() => onSaveField(field.id, field)}
           />
         </>
       )}

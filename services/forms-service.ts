@@ -233,7 +233,7 @@ const formsService = {
       .insert({
         form_id: formId,
         label: "Novo campo",
-        kind: "Escreva um texto",
+        kind: "short_text",
         options: [],
         is_required: false,
         field_order: fieldOrder,
@@ -259,17 +259,17 @@ const formsService = {
     return data;
   },
 
-  updateField: async (fieldID: string, updates: Partial<Field>) => {
+  updateField: async (fieldId: string, updates: Partial<Field>) => {
     const { data, error } = await supabase
       .from("form_fields")
-      .insert({
+      .update({
         kind: updates.kind,
         label: updates.label,
         options: updates.options,
         is_required: updates.isRequired,
         field_order: updates.fieldOrder,
       })
-      .eq("id", fieldID)
+      .eq("id", fieldId)
       .select(
         `
       id,
