@@ -10,11 +10,17 @@ export type Form = {
   createdAt: string;
 };
 
+export type FieldKind =
+  | "short_text"
+  | "long_text"
+  | "single_option"
+  | "multiple_option";
+
 export type Field = {
   id: string;
-  kind: "short_text" | "long_text" | "single_option" | "multiple_option";
+  kind: FieldKind;
   label: string;
-  options?: string[];
+  options: string[];
   isRequired: boolean;
   fieldOrder: number;
   formId: string;
@@ -227,19 +233,18 @@ const formsService = {
     return true;
   },
 
-  addField: async (formId: string, fieldOrder: number) => {
-    const { data, error } = await supabase
-      .from("form_fields")
-      .insert({
-        form_id: formId,
-        label: "Novo campo",
-        kind: "short_text",
-        options: [],
-        is_required: false,
-        field_order: fieldOrder,
-      })
-      .select(
-        `
+ addField: async (formId: string, fieldOrder: number) => {
+  const { data, error } = await supabase
+    .from("form_fields")
+    .insert({
+      form_id: formId,
+      label: "Novo campo",
+      kind: "short_text",
+      options: [], // IMPORTANTE
+      is_required: false,
+      field_order: fieldOrder
+    })
+    .select(`
       id,
       formId: form_id,
       label,
@@ -247,17 +252,18 @@ const formsService = {
       options,
       isRequired: is_required,
       fieldOrder: field_order
-    `,
-      )
-      .single<Field>();
+    `)
+    .single<Field>();
 
-    if (error) {
-      console.log(error);
-      return null;
-    }
+  if (error) {
+    console.log(error);
+    return null;
+  }
 
-    return data;
-  },
+  return data;
+},
+
+
 
   updateField: async (fieldId: string, updates: Partial<Field>) => {
     const { data, error } = await supabase
