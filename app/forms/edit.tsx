@@ -3,6 +3,7 @@ import { Input } from "@/components/input";
 import { ScreenContainer } from "@/components/ScreenContainer";
 import { Switch } from "@/components/switch";
 import { Title } from "@/components/Title";
+import confirm from "@/services/confirm";
 import formsService from "@/services/forms-service";
 import { Theme, useTheme } from "@/themes/ThemeContext";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -76,7 +77,23 @@ export default function EditFormScreen() {
     }
   };
 
-  
+  const deleteForm = async () => {
+    if (typeof formId !== "string") return;
+    confirm(
+      "Excluir Formulario",
+      "Excluir definitivamente o formulario?",
+      async () => {
+        const ok = await formsService.deleteForm(formId);
+
+        if (!ok) {
+          Alert.alert("Erro", "Não foi possivel apagar o formulario");
+          return;
+        }
+
+        router.replace("/forms/list");
+      },
+    );
+  };
 
   return (
     <ScreenContainer>
@@ -113,7 +130,7 @@ export default function EditFormScreen() {
             title="Excluir formulário"
             style={{ flex: 1 }}
             variant="danger"
-            onPress={() => {}}
+            onPress={deleteForm}
           />
         </View>
 
