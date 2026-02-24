@@ -25,5 +25,6 @@ const profileService = {
       Alert.alert("Erro", "Erro");
       return;
     }
+    return data.user;
   },
 };
