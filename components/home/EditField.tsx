@@ -6,6 +6,7 @@ import { Switch } from "../switch";
 import { Input } from "../input";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import { FieldKindPicker } from "./FieldKindPicker";
 
 interface Props {
   field: Field;
@@ -74,13 +75,9 @@ export const FieldCard: FC<Props> = ({
             style={styles.label}
           />
 
-          <Input
-            placeholder="short_text | long_text | single_option | multiple_option"
+          <FieldKindPicker
             value={field.kind}
-            onChangeText={(text) =>
-              onStateChange(field.id, { kind: text as Field["kind"] })
-            }
-            style={styles.label}
+            onChange={(value) => onStateChange(field.id, { kind: value })}
           />
 
           {(field.kind === "single_option" ||
