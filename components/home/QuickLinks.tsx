@@ -29,6 +29,7 @@ export const QuickLinks = () => {
       pathname: "/forms/forms",
       params: { formId: form.id },
     });
+    
     setLoading(false);
   };
   return (
