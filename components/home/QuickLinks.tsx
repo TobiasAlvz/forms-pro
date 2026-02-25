@@ -31,7 +31,6 @@ export const QuickLinks = () => {
     });
 
     setLoading(false);
-    
   };
   return (
     <View style={{ gap: theme.spacing.sm }}>
