@@ -44,7 +44,11 @@ export const QuickLinks = () => {
         variant="outline"
         onPress={() => router.navigate("/forms/list")}
       />
-      <Button title="Ver perfil" variant="outline" onPress={() => {}} />
+      <Button
+        title="Ver perfil"
+        variant="outline"
+        onPress={() => router.navigate("/forms/profile")}
+      />
       <Button
         title="Alternar tema"
         variant="outline"
