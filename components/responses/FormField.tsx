@@ -1,10 +1,11 @@
+import { Field } from "@/services/forms-service";
 import { Theme, useTheme } from "@/themes/ThemeContext";
 import { FC, ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
-import { Field } from "@/services/forms-service";
+import { Button } from "../Button";
 import { ScreenContainer } from "../ScreenContainer";
 import { Title } from "../Title";
-import { Button } from "../Button";
+
 
 interface WrapperProps {
   field: Field;
@@ -31,18 +32,20 @@ const Wrapper: FC<WrapperProps> = ({
   return (
     <ScreenContainer>
       <Title>{field.label}</Title>
-
       {children}
 
       <View style={styles.buttonsContainer}>
+        {!isFirst && (
+          <Button
+            title="Voltar"
+            onPress={onBack}
+            variant="outline"
+            style={styles.button}
+          />
+        )}
+
         <Button
-          title="Back"
-          onPress={onBack}
-          style={styles.button}
-          variant="outline"
-        />
-        <Button
-          title={isLast ? "Submit" : "Next"}
+          title={isLast ? "Enviar" : "Próximo"}
           onPress={() => (isLast ? onSubmit() : onNext())}
           style={styles.button}
         />
@@ -51,24 +54,21 @@ const Wrapper: FC<WrapperProps> = ({
   );
 };
 
-export default {
-  Wrapper,
-};
+// export default {
+//   Wrapper,
+//   LongText: LongTextField,
+//   SingleOption: SingleOptionField,
+//   MultipleOption: MultipleOptionField,
+// };
 
 const createStyles = (theme: Theme) =>
   StyleSheet.create({
-    label: {
-      color: theme.colors.text,
-      fontSize: theme.fontSizes.md,
-      marginBottom: theme.spacing.sm,
-    },
     buttonsContainer: {
       flexDirection: "row",
       gap: theme.spacing.md,
-      justifyContent: "space-between",
-      marginTop: theme.spacing.md,
+      marginTop: theme.spacing.lg,
     },
     button: {
-      flexGrow: 1,
+      flex: 1,
     },
   });
