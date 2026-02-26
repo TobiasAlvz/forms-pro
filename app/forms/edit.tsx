@@ -172,8 +172,8 @@ export default function EditFormScreen() {
             variant="outline"
             onPress={() =>
               router.push({
-                pathname: "/preview/[formid]",
-                params: { formId },
+                pathname: "/preview/[formId]",
+                params: { formId: String(formId) },
               })
             }
           />
