@@ -2,7 +2,7 @@ import { ScreenContainer } from "@/components/ScreenContainer";
 import publicFormService, {
   PublicFormWithFields,
 } from "@/services/public-form-service";
-import { useTheme } from "@/themes/ThemeContext";
+import { Theme, useTheme } from "@/themes/ThemeContext";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, Text, View, StyleSheet } from "react-native";
@@ -90,7 +90,6 @@ function createStyles(theme: Theme) {
     },
 
     headerCard: {
-      backgroundColor: theme.colors.card,
       borderRadius: 14,
       padding: 18,
       borderWidth: 1,
@@ -106,7 +105,7 @@ function createStyles(theme: Theme) {
 
     description: {
       fontSize: 15,
-      color: theme.colors.muted,
+
       lineHeight: 22,
     },
 
@@ -129,7 +128,6 @@ function createStyles(theme: Theme) {
     },
 
     fieldCard: {
-      backgroundColor: theme.colors.card,
       borderRadius: 12,
       padding: 16,
       borderWidth: 1,
@@ -149,13 +147,12 @@ function createStyles(theme: Theme) {
 
     helperText: {
       fontSize: 13,
-      color: theme.colors.muted,
     },
 
     loading: {
       textAlign: "center",
       fontSize: 18,
-      color: theme.colors.muted,
+
       marginTop: 40,
     },
   });
