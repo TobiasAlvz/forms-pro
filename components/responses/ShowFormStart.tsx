@@ -1,26 +1,33 @@
-import { useTheme } from "@/themes/ThemeContext";
+import { Theme, useTheme } from "@/themes/ThemeContext";
 import { FC } from "react";
-import { Text } from "react-native";
-import { ScreenContainer } from "../ScreenContainer";
-import { Title } from "../Title";
-import { Button } from "../Button";
-
+import { StyleSheet } from "react-native";
+import { Input } from "../input";
 
 interface Props {
-  title: string;
-  description: string;
-  onStart: () => void;
+  value: string;
+  onChangeText: (text: string) => void;
 }
 
-export const ShowFormStart: FC<Props> = ({ title, description, onStart }) => {
+export const LongTextField: FC<Props> = ({ value, onChangeText }) => {
   const { theme } = useTheme();
+  const styles = createStyles(theme);
+
   return (
-    <ScreenContainer style={{ justifyContent: "center" }}>
-      <Title align="center">{title}</Title>
-      <Text style={{ textAlign: "center", marginBottom: theme.spacing.md }}>
-        {description}
-      </Text>
-      <Button title="Start" onPress={onStart} />
-    </ScreenContainer>
+    <Input
+      multiline
+      numberOfLines={6}
+      value={value}
+      onChangeText={onChangeText}
+      style={styles.textarea}
+      textAlignVertical="top"
+    />
   );
 };
+
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    textarea: {
+      minHeight: 140,
+      paddingVertical: theme.spacing.md,
+    },
+  });
