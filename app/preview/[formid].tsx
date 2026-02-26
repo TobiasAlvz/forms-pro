@@ -1,22 +1,28 @@
+import { Input } from "@/components/input";
+import FormField from "@/components/responses/FormField";
+import { ShowFormStart } from "@/components/responses/ShowFormStart";
 import { ScreenContainer } from "@/components/ScreenContainer";
 import publicFormService, {
   PublicFormWithFields,
 } from "@/services/public-form-service";
 import { Theme, useTheme } from "@/themes/ThemeContext";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Alert, Text, View, StyleSheet } from "react-native";
+import { ActivityIndicator, Alert, StyleSheet, Text } from "react-native";
 
-export default function PreviewFormsScreen() {
+export default function PreviewFormScreen() {
   const params = useLocalSearchParams();
   const formId = Array.isArray(params.formId)
     ? params.formId[0]
     : params.formId;
 
+  const router = useRouter();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
   const [form, setForm] = useState<PublicFormWithFields | null>(null);
+  const [currentStep, setCurrentStep] = useState(-1);
+  const [answers, setAnswers] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,8 +36,8 @@ export default function PreviewFormsScreen() {
       });
 
       if (!data) {
-        Alert.alert("Erro", "Formulário não encontrado");
-        setLoading(false);
+        Alert.alert("Erro", "Formulário não encontrado.");
+        router.back();
         return;
       }
 
@@ -44,116 +50,98 @@ export default function PreviewFormsScreen() {
 
   if (loading) {
     return (
-      <ScreenContainer>
-        <Text style={styles.loading}>Carregando formulário...</Text>
+      <ScreenContainer style={styles.center}>
+        <ActivityIndicator size="large" color={theme.colors.primary} />
+        <Text style={{ color: theme.colors.text }}>
+          Carregando formulário...
+        </Text>
       </ScreenContainer>
     );
   }
 
+  if (!form) {
+    return (
+      <ScreenContainer style={styles.center}>
+        <Text style={{ color: theme.colors.text }}>
+          Formulário não encontrado.
+        </Text>
+      </ScreenContainer>
+    );
+  }
+
+  if (currentStep === -1) {
+    return (
+      <ShowFormStart
+        title={form.title}
+        description={form.description ?? ""}
+        onStart={() => setCurrentStep(0)}
+      />
+    );
+  }
+
+  const field = form.fields[currentStep];
+
+  if (!field) {
+    return (
+      <ScreenContainer style={styles.center}>
+        <Text style={{ color: theme.colors.text }}>Campo inválido.</Text>
+      </ScreenContainer>
+    );
+  }
+
+  const handleNext = () => {
+    if (currentStep < form.fields.length - 1) {
+      setCurrentStep((current) => current + 1);
+    }
+  };
+
+  const handleBack = () => {
+    if (currentStep === 0) {
+      setCurrentStep(-1);
+      return;
+    }
+    setCurrentStep((current) => current - 1);
+  };
+
+  const handleSubmit = () => {
+    Alert.alert(
+      "Enviado!",
+      "Suas respostas foram registradas (ainda não salvamos no banco).",
+      [{ text: "OK", onPress: () => router.back() }],
+    );
+  };
+
+  const handleChange = (value: string) => {
+    setAnswers((prev) => ({
+      ...prev,
+      [field.id]: value,
+    }));
+  };
+
   return (
-    <ScreenContainer>
-      <View style={styles.container}>
-        {/* Cabeçalho */}
-        <View style={styles.headerCard}>
-          <Text style={styles.title}>{form?.title}</Text>
-
-          {!!form?.description && (
-            <Text style={styles.description}>{form.description}</Text>
-          )}
-        </View>
-
-        <View style={styles.divider} />
-
-        {/* Área de respostas */}
-        <Text style={styles.sectionTitle}>Responda o formulário</Text>
-
-        <View style={styles.fieldsContainer}>
-          <View style={styles.fieldCard}>
-            <Text style={styles.fieldLabel}>
-              Campo de exemplo <Text style={styles.required}>*</Text>
-            </Text>
-
-            <Text style={styles.helperText}>
-              Aqui aparecerão os campos dinamicamente (text, select, checkbox…)
-            </Text>
-          </View>
-        </View>
-      </View>
-    </ScreenContainer>
+    <FormField.Wrapper
+      field={field}
+      isFirst={currentStep === 0}
+      isLast={currentStep === form.fields.length - 1}
+      onBack={handleBack}
+      onNext={handleNext}
+      onSubmit={handleSubmit}
+    >
+      <Input
+        placeholder="Digite sua resposta..."
+        value={answers[field.id] ?? ""}
+        onChangeText={handleChange}
+      />
+    </FormField.Wrapper>
   );
 }
 
-function createStyles(theme: Theme) {
-  return StyleSheet.create({
-    container: {
-      gap: 16,
-    },
-
-    headerCard: {
-      borderRadius: 14,
-      padding: 18,
-      borderWidth: 1,
-      borderColor: theme.colors.border,
-      gap: 8,
-    },
-
-    title: {
-      fontSize: 24,
-      fontWeight: "700",
-      color: theme.colors.text,
-    },
-
-    description: {
-      fontSize: 15,
-
-      lineHeight: 22,
-    },
-
-    divider: {
-      height: 1,
-      backgroundColor: theme.colors.border,
-      marginVertical: 8,
-    },
-
-    sectionTitle: {
-      fontSize: 18,
-      fontWeight: "600",
-      color: theme.colors.text,
-      marginTop: 10,
-    },
-
-    fieldsContainer: {
-      gap: 14,
-      marginTop: 6,
-    },
-
-    fieldCard: {
-      borderRadius: 12,
-      padding: 16,
-      borderWidth: 1,
-      borderColor: theme.colors.border,
-      gap: 8,
-    },
-
-    fieldLabel: {
-      fontSize: 16,
-      fontWeight: "600",
-      color: theme.colors.text,
-    },
-
-    required: {
-      color: theme.colors.primary,
-    },
-
-    helperText: {
-      fontSize: 13,
-    },
-
-    loading: {
-      textAlign: "center",
-      fontSize: 18,
-
-      marginTop: 40,
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    center: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      gap: 10,
     },
   });
-}
