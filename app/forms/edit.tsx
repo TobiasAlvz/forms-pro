@@ -170,7 +170,12 @@ export default function EditFormScreen() {
             title="Visualizar formulário"
             style={{ flex: 1 }}
             variant="outline"
-            onPress={previewForm}
+            onPress={() =>
+              router.push({
+                pathname: "/preview/[formid]",
+                params: { formId },
+              })
+            }
           />
           <Button
             title="Excluir formulário"
