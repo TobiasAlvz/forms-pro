@@ -22,7 +22,6 @@ export default function EditFormScreen() {
   const [fields, setFields] = useState<Field[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // carregar formulário corretamente (IMPORTANTE)
   useEffect(() => {
     if (!formId || typeof formId !== "string") return;
 
@@ -61,8 +60,6 @@ export default function EditFormScreen() {
     Alert.alert("Sucesso", "Formulário salvo!");
     router.back();
   };
-
-  // criar campo (order seguro)
   const addField = async () => {
     if (typeof formId !== "string") return;
 
@@ -95,7 +92,6 @@ export default function EditFormScreen() {
 
     await formsService.removeField(fieldId);
 
-    // salva nova ordem
     for (const f of updated) {
       await formsService.updateField(f.id, { fieldOrder: f.fieldOrder });
     }
