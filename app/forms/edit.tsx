@@ -57,9 +57,6 @@ export default function EditFormScreen() {
     loadForm();
   }, [formId]);
 
-  // =========================
-  // SALVAR FORMULÁRIO
-  // =========================
   const saveForm = async () => {
     if (!formId) return;
 
@@ -103,7 +100,7 @@ export default function EditFormScreen() {
         }
 
         router.replace("/forms/list");
-      }
+      },
     );
   };
 
@@ -111,9 +108,7 @@ export default function EditFormScreen() {
     if (!formId) return;
 
     const nextOrder =
-      fields.length > 0
-        ? Math.max(...fields.map((f) => f.fieldOrder)) + 1
-        : 0;
+      fields.length > 0 ? Math.max(...fields.map((f) => f.fieldOrder)) + 1 : 0;
 
     const field = await formsService.addField(formId, nextOrder);
     if (!field) return;
@@ -123,7 +118,7 @@ export default function EditFormScreen() {
 
   const updateFieldsState = (fieldId: string, changes: Partial<Field>) => {
     setFields((current) =>
-      current.map((f) => (f.id === fieldId ? { ...f, ...changes } : f))
+      current.map((f) => (f.id === fieldId ? { ...f, ...changes } : f)),
     );
   };
 
@@ -131,7 +126,6 @@ export default function EditFormScreen() {
     await formsService.updateField(fieldId, field);
     Alert.alert("Campo salvo");
   };
-
 
   const removeField = async (fieldId: string) => {
     await formsService.removeField(fieldId);
@@ -147,18 +141,13 @@ export default function EditFormScreen() {
     });
   };
 
-
   return (
     <ScreenContainer>
       <ScrollView contentContainerStyle={styles.content}>
         <Title>Editando formulário</Title>
         <Text>ID: {formId}</Text>
 
-        <Input
-          placeholder="Título"
-          value={title}
-          onChangeText={setTitle}
-        />
+        <Input placeholder="Título" value={title} onChangeText={setTitle} />
 
         <Input
           placeholder="Descrição"
