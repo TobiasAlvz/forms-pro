@@ -6,7 +6,6 @@ import { Button } from "../Button";
 import { ScreenContainer } from "../ScreenContainer";
 import { Title } from "../Title";
 
-
 interface WrapperProps {
   field: Field;
   isFirst: boolean;
