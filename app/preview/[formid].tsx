@@ -1,4 +1,7 @@
 import { Button } from "@/components/Button";
+import { LongTextField } from "@/components/responses/LongTextField";
+import MultipleOptionsField from "@/components/responses/MultipleOptionField";
+import SingleOptionField from "@/components/responses/SingleOptionField";
 import { ScreenContainer } from "@/components/ScreenContainer";
 import { Title } from "@/components/Title";
 import { Field } from "@/services/forms-service";
@@ -53,14 +56,12 @@ const Wrapper: FC<WrapperProps> = ({
   );
 };
 
-
-
-// export default {
-//   Wrapper,
-//   LongText: LongTextField,
-//   SingleOption: SingleOptionField,
-//   MultipleOption: MultipleOptionField,
-// };
+export default {
+  Wrapper,
+  LongText: LongTextField,
+  SingleOption: SingleOptionField,
+  MultipleOption: MultipleOptionsField,
+};
 
 const createStyles = (theme: Theme) =>
   StyleSheet.create({
