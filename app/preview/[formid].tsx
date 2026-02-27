@@ -1,11 +1,10 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Alert, StyleSheet, Text } from "react-native";
 
 import { ScreenContainer } from "@/components/ScreenContainer";
 import { Input } from "@/components/input";
 import { Theme, useTheme } from "@/themes/ThemeContext";
-
 import publicFormService, {
   PublicFormWithFields,
 } from "@/services/public-form-service";
@@ -14,8 +13,6 @@ import { LongTextField } from "@/components/responses/LongTextField";
 import SingleOptionField from "@/components/responses/SingleOptionField";
 import MultipleOptionsField from "@/components/responses/MultipleOptionField";
 import { ShowFormStart } from "@/components/responses/ShowFormStart";
-
-
 
 export default function PreviewFormScreen() {
   const params = useLocalSearchParams();
@@ -29,8 +26,10 @@ export default function PreviewFormScreen() {
 
   const [form, setForm] = useState<PublicFormWithFields | null>(null);
   const [currentStep, setCurrentStep] = useState(-1);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
+
+  // respostas sem renderizar tela
+  const answersRef = useRef<Record<string, string>>({});
 
   useEffect(() => {
     if (!formId) return;
@@ -53,6 +52,10 @@ export default function PreviewFormScreen() {
     load();
   }, [formId]);
 
+  const setAnswer = (fieldId: string, value: string) => {
+    answersRef.current[fieldId] = value;
+  };
+
   if (loading) {
     return (
       <ScreenContainer style={styles.center}>
@@ -72,6 +75,7 @@ export default function PreviewFormScreen() {
     );
   }
 
+  // tela inicial
   if (currentStep === -1) {
     return (
       <ShowFormStart
@@ -92,15 +96,8 @@ export default function PreviewFormScreen() {
     );
   }
 
-  const setAnswer = (value: string) => {
-    setAnswers((current) => ({
-      ...current,
-      [field.id]: value,
-    }));
-  };
-
   const handleNext = () => {
-    if (field.isRequired && !answers[field.id]) {
+    if (field.isRequired && !answersRef.current[field.id]) {
       Alert.alert("Atenção", "Este campo é obrigatório.");
       return;
     }
@@ -116,17 +113,19 @@ export default function PreviewFormScreen() {
   };
 
   const handleSubmit = () => {
-    if (field.isRequired && !answers[field.id]) {
+    if (field.isRequired && !answersRef.current[field.id]) {
       Alert.alert("Atenção", "Este campo é obrigatório.");
       return;
     }
 
+    console.log("RESPOSTAS:", answersRef.current);
     Alert.alert("Sucesso", "Formulário enviado!");
     router.back();
   };
 
   return (
     <FormFieldWrapper
+      key={field.id}
       field={field}
       isFirst={currentStep === 0}
       isLast={currentStep === form.fields.length - 1}
@@ -134,34 +133,42 @@ export default function PreviewFormScreen() {
       onNext={handleNext}
       onSubmit={handleSubmit}
     >
+      {/* SHORT TEXT */}
       {field.kind === "short_text" && (
         <Input
+          key={field.id}
           placeholder="Digite sua resposta..."
-          value={answers[field.id] ?? ""}
-          onChangeText={setAnswer}
+          defaultValue={answersRef.current[field.id] ?? ""}
+          onChangeText={(v) => setAnswer(field.id, v)}
         />
       )}
 
+      {/* LONG TEXT */}
       {field.kind === "long_text" && (
         <LongTextField
-          value={answers[field.id] ?? ""}
-          onChangeText={setAnswer}
+          key={field.id}
+          defaultValue={answersRef.current[field.id] ?? ""}
+          onCommit={(v) => setAnswer(field.id, v)}
         />
       )}
 
+      {/* SINGLE OPTION */}
       {field.kind === "single_option" && (
         <SingleOptionField
-          value={answers[field.id] ?? ""}
+          key={field.id}
+          defaultValue={answersRef.current[field.id] ?? ""}
           options={field.options ?? []}
-          onSelect={setAnswer}
+          onCommit={(v) => setAnswer(field.id, v)}
         />
       )}
 
+      {/* MULTIPLE OPTION */}
       {field.kind === "multiple_option" && (
         <MultipleOptionsField
-          value={answers[field.id] ?? "[]"}
+          key={field.id}
+          defaultValue={answersRef.current[field.id] ?? "[]"}
           options={field.options ?? []}
-          onSelect={setAnswer}
+          onCommit={(v) => setAnswer(field.id, v)}
         />
       )}
     </FormFieldWrapper>
