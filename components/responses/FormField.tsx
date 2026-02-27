@@ -5,6 +5,9 @@ import { StyleSheet, View } from "react-native";
 import { Button } from "../Button";
 import { ScreenContainer } from "../ScreenContainer";
 import { Title } from "../Title";
+import { LongTextField } from "./LongTextField";
+import SingleOptionField from "./SingleOptionField";
+import MultipleOptionsField from "./MultipleOptionField";
 
 interface WrapperProps {
   field: Field;
@@ -57,7 +60,7 @@ export default {
   Wrapper,
   LongText: LongTextField,
   SingleOption: SingleOptionField,
-  MultipleOption: MultipleOptionField,
+  MultipleOption: MultipleOptionsField,
 };
 
 const createStyles = (theme: Theme) =>
