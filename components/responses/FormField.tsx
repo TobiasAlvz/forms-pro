@@ -53,12 +53,12 @@ const Wrapper: FC<WrapperProps> = ({
   );
 };
 
-// export default {
-//   Wrapper,
-//   LongText: LongTextField,
-//   SingleOption: SingleOptionField,
-//   MultipleOption: MultipleOptionField,
-// };
+export default {
+  Wrapper,
+  LongText: LongTextField,
+  SingleOption: SingleOptionField,
+  MultipleOption: MultipleOptionField,
+};
 
 const createStyles = (theme: Theme) =>
   StyleSheet.create({
