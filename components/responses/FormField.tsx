@@ -1,6 +1,6 @@
 import { Field } from "@/services/forms-service";
 import { Theme, useTheme } from "@/themes/ThemeContext";
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, memo } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button } from "../Button";
 import { ScreenContainer } from "../ScreenContainer";
@@ -16,7 +16,7 @@ interface WrapperProps {
   children: ReactNode;
 }
 
-export const FormFieldWrapper: FC<WrapperProps> = ({
+const Component: FC<WrapperProps> = ({
   field,
   isFirst,
   isLast,
@@ -46,13 +46,15 @@ export const FormFieldWrapper: FC<WrapperProps> = ({
 
         <Button
           title={isLast ? "Enviar" : "Próximo"}
-          onPress={() => (isLast ? onSubmit() : onNext())}
+          onPress={isLast ? onSubmit : onNext}
           style={styles.button}
         />
       </View>
     </ScreenContainer>
   );
 };
+
+export const FormFieldWrapper = memo(Component);
 
 const createStyles = (theme: Theme) =>
   StyleSheet.create({
