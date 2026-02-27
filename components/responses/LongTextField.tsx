@@ -1,30 +1,33 @@
-import { Theme, useTheme } from "@/themes/ThemeContext";
-import { FC } from "react";
+import { useTheme } from "@/themes/ThemeContext";
+import { FC, useState } from "react";
 import { StyleSheet } from "react-native";
 import { Input } from "../input";
 
 interface Props {
-  value: string;
-  onChangeText: (text: string) => void;
+  defaultValue?: string;
+  onCommit: (value: string) => void;
 }
 
-export const LongTextField: FC<Props> = ({ value, onChangeText }) => {
+export const LongTextField: FC<Props> = ({ defaultValue = "", onCommit }) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
+
+  const [text, setText] = useState(defaultValue);
 
   return (
     <Input
       multiline
       numberOfLines={6}
-      value={value}
-      onChangeText={onChangeText}
+      defaultValue={defaultValue}
+      onChangeText={setText}
+      onBlur={() => onCommit(text)}
       style={styles.textarea}
       textAlignVertical="top"
     />
   );
 };
 
-const createStyles = (theme: Theme) =>
+const createStyles = (theme: any) =>
   StyleSheet.create({
     textarea: {
       minHeight: 140,
