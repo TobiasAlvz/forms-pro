@@ -5,9 +5,6 @@ import { StyleSheet, View } from "react-native";
 import { Button } from "../Button";
 import { ScreenContainer } from "../ScreenContainer";
 import { Title } from "../Title";
-import { LongTextField } from "./LongTextField";
-import SingleOptionField from "./SingleOptionField";
-import MultipleOptionsField from "./MultipleOptionField";
 
 interface WrapperProps {
   field: Field;
@@ -19,7 +16,7 @@ interface WrapperProps {
   children: ReactNode;
 }
 
-const Wrapper: FC<WrapperProps> = ({
+export const FormFieldWrapper: FC<WrapperProps> = ({
   field,
   isFirst,
   isLast,
@@ -34,6 +31,7 @@ const Wrapper: FC<WrapperProps> = ({
   return (
     <ScreenContainer>
       <Title>{field.label}</Title>
+
       {children}
 
       <View style={styles.buttonsContainer}>
@@ -54,13 +52,6 @@ const Wrapper: FC<WrapperProps> = ({
       </View>
     </ScreenContainer>
   );
-};
-
-export default {
-  Wrapper,
-  LongText: LongTextField,
-  SingleOption: SingleOptionField,
-  MultipleOption: MultipleOptionsField,
 };
 
 const createStyles = (theme: Theme) =>
