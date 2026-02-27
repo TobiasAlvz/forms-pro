@@ -1,25 +1,32 @@
 import { useTheme } from "@/themes/ThemeContext";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 interface Props {
-  value: string;
+  defaultValue?: string;
   options: string[];
-  onSelect: (option: string) => void;
+  onCommit: (option: string) => void;
 }
 
-const SingleOptionField: FC<Props> = ({ value, options, onSelect }) => {
+const SingleOptionField: FC<Props> = ({
+  defaultValue = "",
+  options,
+  onCommit,
+}) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
+  const [selected, setSelected] = useState(defaultValue);
+
   const handleSelect = (option: string) => {
-    onSelect(option);
+    setSelected(option);
+    onCommit(option);
   };
 
   return (
     <View style={styles.container}>
       {options.map((option) => {
-        const isSelected = value === option;
+        const isSelected = selected === option;
 
         return (
           <Pressable
@@ -31,7 +38,6 @@ const SingleOptionField: FC<Props> = ({ value, options, onSelect }) => {
               pressed && styles.pressed,
             ]}
           >
-            {/* RADIO */}
             <View
               style={[
                 styles.radioOuter,
@@ -41,7 +47,6 @@ const SingleOptionField: FC<Props> = ({ value, options, onSelect }) => {
               {isSelected && <View style={styles.radioInner} />}
             </View>
 
-            {/* LABEL */}
             <Text style={[styles.label, isSelected && styles.labelSelected]}>
               {option}
             </Text>
@@ -53,8 +58,6 @@ const SingleOptionField: FC<Props> = ({ value, options, onSelect }) => {
 };
 
 export default SingleOptionField;
-
-/* ===================== STYLES ===================== */
 
 const createStyles = (theme: any) =>
   StyleSheet.create({
@@ -83,7 +86,6 @@ const createStyles = (theme: any) =>
       opacity: 0.6,
     },
 
-    /* RADIO BUTTON */
     radioOuter: {
       width: 20,
       height: 20,
@@ -93,7 +95,6 @@ const createStyles = (theme: any) =>
       marginRight: 12,
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: "transparent",
     },
 
     radioOuterSelected: {
@@ -107,7 +108,6 @@ const createStyles = (theme: any) =>
       backgroundColor: theme.colors.primary,
     },
 
-    /* TEXT */
     label: {
       flex: 1,
       fontSize: 15,
