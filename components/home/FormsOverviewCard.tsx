@@ -5,7 +5,7 @@ import { StyleSheet, Text, View } from "react-native";
 interface Props {
   totalForms: number;
   totalResponses: number;
-  latestForm?: { title: string; responses: number };
+  latestForm: { title: string; responses: number } | null;
 }
 
 export const FormsOverviewCard: FC<Props> = ({
@@ -41,7 +41,7 @@ export const FormsOverviewCard: FC<Props> = ({
         </>
       ) : (
         <Text style={styles.noLatestFormText}>
-          Nenhum formulário recente encontrado
+          Nenhum formulário criado ainda
         </Text>
       )}
     </View>
@@ -58,45 +58,56 @@ const createStyles = (theme: Theme) =>
       shadowOpacity: 0.05,
       shadowRadius: 4,
     },
+
     title: {
       fontSize: theme.fontSizes.lg,
       fontWeight: "600",
       marginBottom: theme.spacing.md,
       color: theme.colors.text,
     },
+
     row: {
       flexDirection: "row",
       justifyContent: "space-between",
       marginBottom: theme.spacing.sm,
     },
+
     label: {
       color: theme.colors.secondary,
     },
+
     value: {
       fontWeight: "600",
       color: theme.colors.text,
     },
+
     divider: {
       height: 1,
       backgroundColor: theme.colors.border,
       marginVertical: theme.spacing.md,
     },
+
     subtitle: {
       color: theme.colors.secondary,
       fontSize: theme.fontSizes.sm,
       marginBottom: theme.spacing.sm,
     },
+
     noLatestFormText: {
-      color: theme.colors.onSurface,
+      color: theme.colors.secondary,
       textAlign: "center",
+      marginTop: theme.spacing.sm,
     },
+
     recentTitle: {
       color: theme.colors.text,
       fontSize: theme.fontSizes.md,
       fontWeight: "600",
     },
+
     responses: {
       color: theme.colors.success,
       fontSize: theme.fontSizes.sm,
+      marginTop: 2,
     },
   });
