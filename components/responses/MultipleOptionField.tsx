@@ -1,30 +1,50 @@
 import { useTheme } from "@/themes/ThemeContext";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 interface Props {
-  value: string;
+  defaultValue?: string;
   options: string[];
-  onSelect: (value: string) => void;
+  onCommit: (value: string) => void;
 }
 
-const MultipleOptionsField: FC<Props> = ({ value, options, onSelect }) => {
+const MultipleOptionsField: FC<Props> = ({
+  defaultValue = "[]",
+  options,
+  onCommit,
+}) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
-  let selected: string[] = [];
-  try {
-    selected = JSON.parse(value || "[]");
-  } catch {
-    selected = [];
-  }
+  // valor inicial seguro
+  const parseValue = (v: string): string[] => {
+    try {
+      const parsed = JSON.parse(v);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  };
+
+  const [selected, setSelected] = useState<string[]>(parseValue(defaultValue));
+
+  // 🔥 MUITO IMPORTANTE
+  // quando muda de pergunta, sincroniza o estado interno
+  useEffect(() => {
+    setSelected(parseValue(defaultValue));
+  }, [defaultValue]);
 
   const toggle = (option: string) => {
-    const updated = selected.includes(option)
-      ? selected.filter((o) => o !== option)
-      : [...selected, option];
+    let updated: string[];
 
-    onSelect(JSON.stringify(updated));
+    if (selected.includes(option)) {
+      updated = selected.filter((o) => o !== option);
+    } else {
+      updated = [...selected, option];
+    }
+
+    setSelected(updated);
+    onCommit(JSON.stringify(updated));
   };
 
   return (
@@ -60,8 +80,6 @@ const MultipleOptionsField: FC<Props> = ({ value, options, onSelect }) => {
 
 export default MultipleOptionsField;
 
-/* ================== STYLES ================== */
-
 const createStyles = (theme: any) =>
   StyleSheet.create({
     container: {
@@ -82,7 +100,7 @@ const createStyles = (theme: any) =>
 
     optionSelected: {
       borderColor: theme.colors.primary,
-      backgroundColor: theme.colors.primary + "15", // leve transparência
+      backgroundColor: theme.colors.primary + "15",
     },
 
     pressed: {
@@ -98,7 +116,6 @@ const createStyles = (theme: any) =>
       marginRight: 12,
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: "transparent",
     },
 
     checkBoxSelected: {
