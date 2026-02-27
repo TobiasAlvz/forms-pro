@@ -6,7 +6,6 @@ import { Theme, useTheme } from "@/themes/ThemeContext";
 import { FC, ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 
-
 interface WrapperProps {
   field: Field;
   isFirst: boolean;
@@ -53,6 +52,8 @@ const Wrapper: FC<WrapperProps> = ({
     </ScreenContainer>
   );
 };
+
+
 
 // export default {
 //   Wrapper,
