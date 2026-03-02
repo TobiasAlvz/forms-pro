@@ -2,7 +2,14 @@ import formsService, { Field, Form } from "@/services/forms-service";
 import { Theme, useTheme } from "@/themes/ThemeContext";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Alert, StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+  Share,
+} from "react-native";
 
 import { ScreenContainer } from "@/components/ScreenContainer";
 import { Title } from "@/components/Title";
@@ -94,6 +101,19 @@ export default function ShowFormScreen() {
           style={styles.button}
         />
       </View>
+
+      <Button
+        title="Share this form!"
+        variant="success"
+        onPress={() =>
+          Share.share({
+            title: "Check out my form!",
+            message: `Please answer this form at: onebitforms://forms/public/${form.id}`,
+            url: `onebitforms://forms/public/${form.id}`,
+          })
+        }
+        style={{ marginTop: theme.spacing.md }}
+      />
     </ScreenContainer>
   );
 }
